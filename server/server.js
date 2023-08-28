@@ -1,8 +1,14 @@
+import chalk from 'chalk';
 import express from 'express';
+import dotenv from 'dotenv'
+
 const app = express();
+const Port = process.env.PORT || 5000
 
-app.get('/', (req, res) => {
-    res.send('hello')
-})
+// Database Connection 
+import connectDb from './config/db.js'
+dotenv.config({path: './config/.env'});
+connectDb();
 
-app.listen(5000, () => console.log('Server is upto 5000!'))
+
+app.listen(Port, () => console.log(chalk.blueBright(`Server is upto ${Port}`)))
