@@ -1,14 +1,25 @@
+import cors from 'cors'
 import chalk from 'chalk';
-import express from 'express';
 import dotenv from 'dotenv'
+import express from 'express';
+import bodyParser from 'body-parser';
 
 const app = express();
 const Port = process.env.PORT || 5000
 
-// Database Connection 
 import connectDb from './config/db.js'
+import userRoute from './routes/userRoute.js'
+
+// Database connection 
 dotenv.config({path: './config/.env'});
 connectDb();
 
+// Middleware 
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+
+// Routes 
+app.use('/api/auth', userRoute)
 
 app.listen(Port, () => console.log(chalk.blueBright(`Server is upto ${Port}`)))
