@@ -1,8 +1,45 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/besocial.png";
 import LoginImg from "../../assets/Login.jpg";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const Login = async () => {
+    if (
+      !/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(
+        email
+      )
+    ) {
+      alert('Invalid Email')
+      return;
+    }
+    try {
+      const fetchData = await fetch("http://localhost:5000/api/auth/login", {
+        method: "post",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+      const response = await fetchData.json();
+      console.log(response)
+      if (response.error) {
+        alert(response.error)
+      } else {
+        alert(response.message)
+        // navigate('/login')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+}
   return (
     <section className="bg-gray-80 my-[60px]">
       <div className="w-[150vh] mx-auto">
@@ -18,16 +55,16 @@ const Login = () => {
               <input
                 className="my-5 ps-2 w-[300px] h-8 placeholder: outline-none text-gray-900"
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)}
               />
               <br />
               <input
                 className="my-2 ps-2 w-[300px] h-8 placeholder: outline-none text-gray-900"
                 type="password"
-                placeholder="Enter your password"
+                placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)}
               />
               <div className="mt-[20px]">
-                <button
+                <button onClick={Login}
                   type="submit"
                   className="w-[100px] bg-gray-800 py-2 cursor-pointer hover:bg-gray-900 transition"
                 >
