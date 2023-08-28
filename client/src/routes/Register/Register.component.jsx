@@ -47,34 +47,34 @@ const Register = () => {
   return (
     <div>
       <section className="bg-gray-80 my-[60px]">
-      <div className="w-[150vh] mx-auto">
-        <div className="w-[600px] mx-auto my-5">
+      <div className="md:w-[150vh] w-[55vh] mx-auto">
+        <div className="md:w-[600px] w-[200px] mx-auto my-5">
           <img src={Logo} className="h-9 w-[180px]" />
         </div>
         <div className="flex h-[400px]">
-          <div className="w-[500px] border mx-5 flex flex-col bg-gray-600 text-white">
-            <h1 className="text-3xl ms-9 mt-[40px] font-bold">
+          <div className="md:w-[500px] w-[350px] border mx-5 flex flex-col bg-gray-600 text-white">
+            <h1 className="md:text-3xl text-2xl ms-9 mt-[40px] font-bold">
               Register your account
             </h1>
             <div className="my-5 ms-9">
             <input
-                className="my-2 ps-2 w-[300px] h-8 placeholder: outline-none text-gray-900"
+                className="my-2 ps-2 w-[250px] md:w-[300px] h-8 placeholder: outline-none text-gray-900"
                 type="text"
                 placeholder="Enter your name" onChange={(e) => setName(e.target.value)}
               />
             <input
-                className="my-2 ps-2 w-[300px] h-8 placeholder: outline-none text-gray-900"
+                className="my-2 ps-2 w-[250px] md:w-[300px] h-8 placeholder: outline-none text-gray-900"
                 type="text"
                 placeholder="Enter your username" onChange={(e) => setUsername(e.target.value)}
               />
               <input
-                className="my-2 ps-2 w-[300px] h-8 placeholder: outline-none text-gray-900"
+                className="my-2 ps-2 w-[250px] md:w-[300px] h-8 placeholder: outline-none text-gray-900"
                 type="email"
                 placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)}
               />
               <br />
               <input
-                className="my-2 ps-2 w-[300px] h-8 placeholder: outline-none text-gray-900"
+                className="my-2 ps-2 w-[250px] md:w-[300px] h-8 placeholder: outline-none text-gray-900"
                 type="password"
                 placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)}
               />
@@ -91,7 +91,7 @@ const Register = () => {
               </div>
             </div>
           </div>
-          <img className="h-[400px]" src={RegImg} alt="" />
+          <img className="hidden md:flex h-[400px]" src={RegImg} alt="" />
         </div>
       </div>
     </section>
