@@ -9,6 +9,7 @@ const Port = process.env.PORT || 5000
 
 import connectDb from './config/db.js'
 import userRoute from './routes/userRoute.js'
+import postRoute from './routes/postRoute.js'
 
 // Database connection 
 dotenv.config({path: './config/.env'});
@@ -21,5 +22,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 // Routes 
 app.use('/api/auth', userRoute)
+app.use('/api/post', postRoute)
+
 
 app.listen(Port, () => console.log(chalk.blueBright(`Server is upto ${Port}`)))

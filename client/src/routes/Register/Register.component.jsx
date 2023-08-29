@@ -7,7 +7,6 @@ const Register = () => {
   const preset_key = "Besocial";
   const cloud_name = "sensex";
   const navigate = useNavigate();
-  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -6,6 +6,7 @@ import Register from "./routes/Register/Register.component";
 import Header from "./components/Header/Header.component";
 import { UserContext } from "./context/user.context";
 import Profile from "./routes/Profile/Profile.component";
+import Post from "./routes/Post/Post.component";
 import './App.css'
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/createpost" element={<Post />} /> 
       </Route>
     </Routes>
   );
