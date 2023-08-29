@@ -1,12 +1,21 @@
-import { useState } from 'react'
-import {NavLink} from 'react-router-dom'
+import { useState, useContext } from 'react'
+import {Link} from 'react-router-dom'
 import {Menu, X} from 'lucide-react'
+import { UserContext } from '../../context/user.context'
 
 const NavLinks = () => {
+  const {setCurrentUser} = useContext(UserContext)
+  const logoutUser = () => {
+    localStorage.clear();
+    setCurrentUser(null);
+  };
   return (
     <>
-      <NavLink className='' to='/login'>Login</NavLink>
-      <NavLink className='' to='/profile'>profile</NavLink>
+      <Link className='' to='/profile'>CREATE</Link>
+      {
+      localStorage.getItem('token') !== null ? (<Link to='/login' onClick={logoutUser}>LOGOUT</Link>)
+      : (<Link className='' to='/login'>LOGIN</Link>)
+    }  
     </>
   )
 }

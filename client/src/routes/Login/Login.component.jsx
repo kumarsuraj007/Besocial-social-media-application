@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState} from "react";
 import Logo from "../../assets/besocial.png";
 import LoginImg from "../../assets/Login.jpg";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -29,12 +30,14 @@ const Login = () => {
         }),
       });
       const response = await fetchData.json();
-      console.log(response)
       if (response.error) {
         alert(response.error)
       } else {
+        localStorage.setItem('user', JSON.stringify(response.user))
+        localStorage.setItem('token', response.token)
         alert(response.message)
-        // navigate('/login')
+        navigate('/')
+        window.location.reload()
       }
     } catch (error) {
       console.log(error)
