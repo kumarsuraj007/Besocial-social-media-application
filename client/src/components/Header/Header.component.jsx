@@ -5,7 +5,7 @@ import Logo from '../Logo/Logo.component';
 const Header = () => {
   return (
     <nav className=''>
-    <div className='bg-gray-200 md:h-[80px] h-[100px] flex justify-between items-center px-10 flex-wrap'>
+    <div className='shadow-xl md:h-[80px] h-[100px] flex justify-between items-center px-10 flex-wrap'>
       <Logo />
       <Nav />
     </div>

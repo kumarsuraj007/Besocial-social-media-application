@@ -11,7 +11,10 @@ const NavLinks = () => {
   };
   return (
     <>
-      <Link className='' to='/profile'>CREATE</Link>
+    {
+      localStorage.getItem('token') !== null ? (<Link to='/profile'>PROFILE</Link>)
+      : (<Link to='/'>HOME</Link>)
+    }
       {
       localStorage.getItem('token') !== null ? (<Link to='/login' onClick={logoutUser}>LOGOUT</Link>)
       : (<Link className='' to='/login'>LOGIN</Link>)

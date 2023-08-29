@@ -5,6 +5,8 @@ import Login from "./routes/Login/Login.component";
 import Register from "./routes/Register/Register.component";
 import Header from "./components/Header/Header.component";
 import { UserContext } from "./context/user.context";
+import Profile from "./routes/Profile/Profile.component";
+import './App.css'
 
 const App = () => {
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ const App = () => {
         <Route index element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
     </Routes>
   );

@@ -78,7 +78,7 @@ const Login = () => {
               </div>
             </div>
           </div>
-          <img className="hidden md:flex h-[400px]" src={LoginImg} alt="" />
+          <img className="mix-blend-color-burn hidden md:flex h-[400px]" src={LoginImg} alt="" />
         </div>
       </div>
     </section>
