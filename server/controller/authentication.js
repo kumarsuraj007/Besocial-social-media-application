@@ -15,7 +15,7 @@ dotenv.config({ path: resolve(__dirname, '../config/.env') });
 const secret_key = process.env.JWT_SECRET;
 
 export const registerUser = asyncHandler(async(req, res) => {
-    const {name, username, email, password} = req.body;
+    const {username, email, password, pic} = req.body;
     const existingUserEmail = await userSchema.findOne({email: email});
     if(existingUserEmail) {
         return res.status(409).json({error: 'This Email is already registered'})
@@ -29,10 +29,10 @@ export const registerUser = asyncHandler(async(req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const saveUser = await userSchema.create({
-        name,
         username,
         email,
-        password:hashedPassword
+        password:hashedPassword,
+        photo:pic
     });
     res.status(200).json({message: 'User registered successfully!'})
 });
@@ -48,8 +48,8 @@ export const loginUser = asyncHandler(async(req, res) => {
         const token = await Jwt.sign({
             _id: existingUserEmail.id
         }, secret_key)
-        const {_id, username} = existingUserEmail
-        res.json({message: 'Successfully Login', token, user:{_id, username}})
+        const {_id, username, photo} = existingUserEmail
+        res.json({message: 'Successfully Login', token, user:{_id, username, photo}})
     } else {
         return res.status(400).json({error: 'Email and password are incorrect!'}) 
     }

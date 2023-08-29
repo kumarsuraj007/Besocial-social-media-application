@@ -36,7 +36,6 @@ const Login = () => {
         localStorage.setItem('user', JSON.stringify(response.user))
         localStorage.setItem('token', response.token)
         alert(response.message)
-        navigate('/photo')
         window.location.reload()
       }
     } catch (error) {
