@@ -76,7 +76,7 @@ const Register = () => {
               </h1>
               <div className="flex justify-between mx-9 w-[300px]">
                 <img
-                  className="w-[70px] h-[70px] rounded-full mt-2"
+                  className="w-[70px] h-[70px] rounded-full mt-2 object-cover"
                   src={photo}
                 />
                 <h2 className="flex items-center">Choose an avatar</h2>

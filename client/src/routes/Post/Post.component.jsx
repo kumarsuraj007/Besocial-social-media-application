@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Post = () => {
+  const navigate = useNavigate()
   const preset_key = "Besocial";
   const cloud_name = "sensex";
   const [title, setTitle] = useState()
@@ -36,7 +38,10 @@ const Post = () => {
         pic:url
       })
     }).then(res => res.json())
-    .then(response => alert(response.Message))
+    .then(response => {
+      alert(response.Message)
+      navigate('/')
+    })
     .catch(err => console.log(err))
   }
 

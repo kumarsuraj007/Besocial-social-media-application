@@ -2,7 +2,7 @@ import postModelSchema from "../model/postModel.js";
 import asyncHandler from "express-async-handler";
 
 export const createPost = asyncHandler(async (req, res) => {
-  const { title, body, pic } = req.body;
+  const { title, body, pic} = req.body;
   const savePost = await postModelSchema.create({
     title,
     body,
@@ -74,8 +74,6 @@ export const commentPost = asyncHandler(async (req, res) => {
 });
 
 export const deletePost = asyncHandler(async (req, res) => {
-  await postModelSchema
-    .findByIdAndDelete({ _id: req.params.postId })
-    .populate("postedBy", "_id");
-  res.status(200).json("Post Deleted!");
-});
+      await postModelSchema.findByIdAndDelete({_id:req.params.id}).populate("postedBy", "_id")
+      res.status(200).json({message: "Post Deleted!"})
+})

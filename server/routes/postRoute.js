@@ -9,6 +9,6 @@ router.route('/mypost').get(requireLoginAuth, myPost);
 router.route('/like').put(requireLoginAuth, likePost);
 router.route('/unlike').put(requireLoginAuth, unLikePost);
 router.route('/comment').put(requireLoginAuth, commentPost);
-router.route('/deletepost/:postId').delete(requireLoginAuth, deletePost);
+router.route('/delete/:id').delete(requireLoginAuth, deletePost);
 
 export default router;
