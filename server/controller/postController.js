@@ -3,12 +3,12 @@ import asyncHandler from "express-async-handler";
 
 export const createPost = asyncHandler(async (req, res) => {
   const { title, body, pic} = req.body;
-  const savePost = await postModelSchema.create({
-    title,
-    body,
-    photo: pic,
-    postedBy: req.user,
-  });
+        const savePost = await postModelSchema.create({
+            title,
+            body,
+            photo:pic,
+            postedBy: req.user
+        })
   res.status(200).json({ Message: "Post created successfully!" });
 });
 
@@ -36,7 +36,7 @@ export const likePost = asyncHandler(async (req, res) => {
     {
       new: true,
     }
-  );
+  ).populate("postedBy", "_id username")
   res.json(likePostData);
 });
 
@@ -49,7 +49,7 @@ export const unLikePost = asyncHandler(async (req, res) => {
     {
       new: true,
     }
-  );
+  ).populate("postedBy", "_id username")
   res.json(likePostData);
 });
 

@@ -85,6 +85,32 @@ const Main = () => {
         })
   }
 
+  const commentPost = (text, postId) => {
+    fetch('http://localhost:5000/api/post/comment', {
+      method: "put",
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer " + localStorage.getItem('token')
+      },
+      body: JSON.stringify({
+        text,
+        postId
+      })
+    }).then(res => res.json()).then(result => {
+      console.log(result)
+      const newData = data.map(item => {
+        if (item._id == result._id) {
+          return result
+        } else {
+          return item
+        }
+      })
+      setData(newData)
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
   return (
     <div className="h-auto py-10 md:w-[80vh] w-[50vh] mx-auto mt-[20px]">
       {data?.map((item) => {
@@ -112,17 +138,31 @@ const Main = () => {
               </div>
             </div>
             <img
-              className="h-[300px] md:mt-[30px] object-contain"
+              className="h-auto py-5 mt-[20px] md:mt-[30px] object-contain"
               src={item.photo}
               alt=""
             />
-            <div className="mt-[10px] ps-[20px]">
+            <div className="md:mt-[10px] ps-[20px] flex py-1 items-center">
                 {
                   item.likes?.includes(currentUser._id) ? <span onClick={() => unLikePost(item._id)} ><ThumbsDown /></span>  : <span onClick={() => likePost(item._id)} ><ThumbsUp /></span>
                 }
+                <span className="ps-[10px] text-xl">{item.likes.length} Likes</span>
               </div>
-            <span className="md:mt-[20px] px-5 text-2xl">{item.title}</span>
-            <p className="mt-2 px-5 text-1xl text-gray-400">{item.body}</p>
+            <p className="px-5 mt-[20px] md:mt-0 text-1xl">{item.body}</p>
+            {
+                item.comments.map(record=>{
+                  return(
+                    <h6 className="ps-[20px] mt-[20px]" key={record._id}><span className="font-bold">{record.postedBy.username}</span> {record.text}</h6>
+                  )
+                })
+              }
+              <form action="" onSubmit={(e) => {
+                e.preventDefault();
+                commentPost(e.target[0].value, item._id)
+                e.target[0].value = '';
+              }}>
+              <input className="ms-[15px] ps-[5px] mt-[10px] outline-0" type="text" placeholder="add a comment" />
+              </form>
             <hr className="mt-4" />
           </div>
         );
