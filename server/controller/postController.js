@@ -36,7 +36,8 @@ export const likePost = asyncHandler(async (req, res) => {
     {
       new: true,
     }
-  ).populate("postedBy", "_id username")
+  ).populate("postedBy", "_id username photo")
+  .populate("comments.postedBy", "_id username")
   res.json(likePostData);
 });
 
@@ -49,7 +50,8 @@ export const unLikePost = asyncHandler(async (req, res) => {
     {
       new: true,
     }
-  ).populate("postedBy", "_id username")
+  ).populate("postedBy", "_id username photo")
+  .populate("comments.postedBy", "_id username")
   res.json(likePostData);
 });
 
@@ -69,7 +71,7 @@ export const commentPost = asyncHandler(async (req, res) => {
       }
     )
     .populate("comments.postedBy", "_id username")
-    .populate("postedBy", "_id username");
+    .populate("postedBy", "_id username photo");
   res.json(commentPostData);
 });
 
