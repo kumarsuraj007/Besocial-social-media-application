@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import {UserContext} from '../../context/user.context'
 import {Trash2, ThumbsUp, ThumbsDown} from 'lucide-react'
-import { set } from "mongoose";
+import { Link } from "react-router-dom";
 
 const Main = () => {
   const {currentUser} = useContext(UserContext)
@@ -96,10 +96,16 @@ const Main = () => {
                 src={item.postedBy.photo}
                 alt=""
               />
+              <div className="flex flex-col">
+              <Link to='/profile'>
               <span className="px-2 mt-[10px] text-1xl">
                 {item.postedBy.username}
               </span>
-              <div onClick={() => deletePost(item._id)} className="md:ps-[350px] mt-[10px] cursor-pointer">
+              </Link>
+              <span className="text-[10px] px-2 text-gray-400">{item.title}</span>
+              </div>
+              
+              <div onClick={() => deletePost(item._id)} className="md:ps-[350px] ps-[200px] mx-2 mt-[10px]  cursor-pointer">
               { 
               item.postedBy._id == currentUser._id && <Trash2/>
               }
@@ -116,7 +122,7 @@ const Main = () => {
                 }
               </div>
             <span className="md:mt-[20px] px-5 text-2xl">{item.title}</span>
-            <p className="mt-2 px-5 text-1xl">{item.body}</p>
+            <p className="mt-2 px-5 text-1xl text-gray-400">{item.body}</p>
             <hr className="mt-4" />
           </div>
         );
