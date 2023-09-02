@@ -53,4 +53,21 @@ export const loginUser = asyncHandler(async(req, res) => {
     } else {
         return res.status(400).json({error: 'Email and password are incorrect!'}) 
     }
-})
+});
+
+
+export const updateUser = asyncHandler(async(req, res) => {
+    const userId = req.params.id
+    const {username, body, pic} = req.body
+    const updateUser = await userSchema.findByIdAndUpdate(userId, {
+        username,
+        body,
+        photo:pic
+    }, {
+        new: true
+    }).populate("username")
+    if (!updateUser) {
+        return res.status(400).json({message: "User not found"})
+    }
+    res.status(200).json({message: 'Profile updated successfully', updateUser})
+});

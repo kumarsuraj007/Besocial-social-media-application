@@ -2,9 +2,10 @@ import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../context/user.context";
 import { Link } from "react-router-dom";
 
+
 const Profile = () => {
   const { currentUser } = useContext(UserContext);
-  const [myPost, setMyPost] = useState()
+  const [myPost, setMyPost] = useState();
 
   useEffect(() => {
     fetch('http://localhost:5000/api/post/mypost', {
@@ -16,6 +17,7 @@ const Profile = () => {
     })
   }, [])
 
+
   return (
     <div className="flex h-screen w-full justify-center pt-[50px]">
       <div className="w-[160vh]">
@@ -25,17 +27,28 @@ const Profile = () => {
               className=" object-cover md:w-[300px] md:h-[300px] h-[150px] w-[150px] border-2 rounded-full"
               src={currentUser?.photo}
             />
+            <div className="flex justify-center flex-col mx-2">
             <h3 className="md:text-5xl text-2xl text-gray-900 font-medium leading-8 flex items-center">
               {currentUser?.username}
             </h3>
+            <p className="md:mt-[20px] md:text-[20px] text-[12px] text-gray-500">{currentUser?.body}</p>
+            </div>
           </div>
         </div>
-        <div className="mt-[30px] ms-[20px] flex py-3 px-9 bg-gray-200 w-[180px] cursor-pointer hover:bg-slate-300 transition-all">
+        <div className="flex ms-4">
+        <div className="mt-[30px] flex py-3  px-9 bg-gray-200 cursor-pointer hover:bg-slate-300 transition-all">
         <Link to='/createpost'>
           <p className="mx-1">Create Post</p>
         </Link>
         </div>
-        
+        <div className="mt-[30px] flex py-3 ml-2 px-9 bg-gray-200 cursor-pointer hover:bg-slate-300 transition-all">
+        <Link to='/editprofile'>
+        <p className="mx-1">
+            Edit Profile
+          </p>
+        </Link>
+        </div>
+        </div>
         <div className=" mt-8 flex flex-wrap md:px-4 px-5 gap-4">
           {
             myPost?.map(item => {
@@ -44,8 +57,6 @@ const Profile = () => {
               )
             })
           }
-            
-           
         </div>
       </div>
     </div>

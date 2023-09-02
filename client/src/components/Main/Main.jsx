@@ -71,7 +71,7 @@ const Main = () => {
         method: "delete",
         headers: {
           "Content-type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Authorization": "Bearer " + localStorage.getItem("token"),
         },
       })
         .then((res) => res.json())
