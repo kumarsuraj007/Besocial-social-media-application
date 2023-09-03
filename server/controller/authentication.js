@@ -71,3 +71,31 @@ export const updateUser = asyncHandler(async(req, res) => {
     }
     res.status(200).json({message: 'Profile updated successfully', updateUser})
 });
+
+export const followUser = asyncHandler(async(req, res) => {
+    const followUser = await userSchema.findByIdAndUpdate(req.body.followId, {
+        $push :{followers:req.user._id}
+    }, {
+        new:true
+    })
+    const followingUser = await userSchema(req.user._id, {
+        $push:{following:req.user._id}
+    }, {
+        new: true
+    })
+    res.status(200).json({message: 'Task successfully complete'})
+})
+
+export const unFollowUser = asyncHandler(async(req, res) => {
+    const unFollowUser = await userSchema.findByIdAndUpdate(req.body.unFollowId, {
+        $pull :{followers:req.user._id}
+    }, {
+        new:true
+    })
+    const unFollowingUser = await userSchema(req.user._id, {
+        $pull :{following:req.user._id}
+    }, {
+        new: true
+    })
+    res.status(200).json({message: 'Task successfully complete'})
+})

@@ -124,14 +124,19 @@ const Main = () => {
                 src={item.postedBy.photo}
                 alt=""
               />
-              <div className="flex flex-col">
-              <span className="px-2 mt-[10px] text-1xl">
+              
+              <div className="flex flex-col item-center">
+              <Link to={item.postedBy._id !== currentUser._id ? `/profile/${item.postedBy._id}` : '/profile' }>
+              <span className="px-2 text-1xl">
                 {item.postedBy.username}
               </span>
+              </Link>
+
               <span className="text-[10px] px-2 text-gray-400">{item.title}</span>
               </div>
               
-              <div onClick={() => deletePost(item._id)} className="md:ps-[350px] ps-[150px] mx-2 mt-[10px] cursor-pointer">
+              
+              <div onClick={() => deletePost(item._id)} className="md:ps-[390px] ps-[150px] mx-2 mt-[10px] cursor-pointer">
               { 
               item.postedBy._id == currentUser._id && <Trash2/>
               }
@@ -139,7 +144,7 @@ const Main = () => {
             </div>
             <div className="flex justify-center">
             <img
-              className="h-auto py-5 mt-[20px] md:mt-[30px] object-contain"
+              className="h-auto py-5 mt-[20px] md:mt-[30px] object-cover"
               src={item.photo}
               alt=""
             />

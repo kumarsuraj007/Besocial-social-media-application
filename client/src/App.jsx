@@ -8,6 +8,7 @@ import { UserContext } from "./context/user.context";
 import Profile from "./routes/Profile/Profile.component";
 import Post from "./routes/Post/Post.component";
 import Edit from "./routes/EditProfile/Edit.component";
+import UserProfile from "./routes/UserProfile/UserProfile.component";
 import './App.css'
 
 const App = () => {
@@ -28,9 +29,10 @@ const App = () => {
         <Route index element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route exact path="/profile" element={<Profile />} />
         <Route path="/createpost" element={<Post />} /> 
         <Route path="/editprofile" element={<Edit />} /> 
+        <Route path="/profile/:userId" element={<UserProfile />} /> 
       </Route>
     </Routes>
   );
