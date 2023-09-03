@@ -3,8 +3,10 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "../../context/user.context";
 
 const UserProfile = () => {
-  const {setCurrentUser}=  useContext(UserContext)
-    const {userId} = useParams()
+  const {userId} = useParams()
+  const {setCurrentUser, currentUser}=  useContext(UserContext)
+
+  const [checkButton, setCheckButton] = useState(null)
     const [userProfile, setUserProfile] = useState(null);
     const [userPosts, setUserPosts] = useState(null);
 
@@ -19,6 +21,8 @@ const UserProfile = () => {
           setUserPosts(postedByUser)
         })
       }, [])
+
+      
 
       const followUser = () => {
         fetch('http://localhost:5000/api/auth/follow', {
@@ -42,6 +46,34 @@ const UserProfile = () => {
              window.location.reload()
          }  })
       }
+
+      const unFollowUser = () => {
+        fetch('http://localhost:5000/api/auth/unfollow', {
+          method: "put",
+          headers: {
+            'Content-type': "application/json",
+            'Authorization': "Bearer " + localStorage.getItem("token")
+          },
+          body: JSON.stringify({
+            unFollowId:userId
+          })
+        }).then(res => res.json())
+        .then(result => {
+          if(result.error) {
+            return alert(result.error)
+         } else {
+             localStorage.removeItem("user")
+             localStorage.setItem("user", JSON.stringify(result))
+             const updatedUser = JSON.parse(localStorage.getItem("user"));
+             setCurrentUser(updatedUser)
+             window.location.reload()
+         }  })
+      }
+
+      useEffect(() => {
+        const user = currentUser?.following;
+        user?.forEach(item => {return setCheckButton(item == userId)})
+      }, [currentUser])
     
 
   return (
@@ -59,9 +91,8 @@ const UserProfile = () => {
           {userProfile?.username}
         </h3>
         {
-          
+           checkButton ? <button onClick={() => unFollowUser()} className="mt-3 py-2 px-5 bg-gray-500 text-white hover:bg-gray-400 transition-all cursor-pointer">Unfollow</button> : <button className="mt-3 py-2 px-5 bg-blue-600 text-white hover:bg-blue-500 transition-all cursor-pointer" onClick={() => followUser()}>Follow</button>
         }
-        <button onClick={() => followUser()} className="mt-3 py-2 px-5 bg-blue-600 text-white hover:bg-blue-500 transition-all cursor-pointer">Follow</button>
             </div>
         
         <p className="md:mt-[10px] ps-1 mt-0 md:text-[15px] text-[10px] text-gray-500">Hey there</p>
