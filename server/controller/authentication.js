@@ -48,8 +48,8 @@ export const loginUser = asyncHandler(async(req, res) => {
         const token = await Jwt.sign({
             _id: existingUserEmail.id
         }, secret_key)
-        const {_id, username, photo} = existingUserEmail
-        res.json({message: 'Successfully Login', token, user:{_id, username, photo}})
+        const {_id, username, photo, followers, following} = existingUserEmail
+        res.json({message: 'Successfully Login', token, user:{_id, username, photo, followers, following}})
     } else {
         return res.status(400).json({error: 'Email and password are incorrect!'}) 
     }
@@ -72,30 +72,47 @@ export const updateUser = asyncHandler(async(req, res) => {
     res.status(200).json({message: 'Profile updated successfully', updateUser})
 });
 
+
 export const followUser = asyncHandler(async(req, res) => {
-    const followUser = await userSchema.findByIdAndUpdate(req.body.followId, {
-        $push :{followers:req.user._id}
-    }, {
-        new:true
-    })
-    const followingUser = await userSchema(req.user._id, {
-        $push:{following:req.user._id}
-    }, {
-        new: true
-    })
-    res.status(200).json({message: 'Task successfully complete'})
+        // Update the user being followed
+        const followedUser = await userSchema.findByIdAndUpdate(
+          req.body.followId,
+          { $push: { followers: req.user._id } },
+          { new: true }
+        );
+    
+        if (!followedUser) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+    
+        // Update the current user's following list
+        const currentUser = await userSchema.findByIdAndUpdate(
+          req.user._id,
+          { $push: { following: req.body.followId } },
+          { new: true }
+        ).select('-password');
+    
+        res.status(200).json(currentUser);
 })
 
 export const unFollowUser = asyncHandler(async(req, res) => {
-    const unFollowUser = await userSchema.findByIdAndUpdate(req.body.unFollowId, {
-        $pull :{followers:req.user._id}
-    }, {
-        new:true
-    })
-    const unFollowingUser = await userSchema(req.user._id, {
-        $pull :{following:req.user._id}
-    }, {
-        new: true
-    })
-    res.status(200).json({message: 'Task successfully complete'})
+    // Update the user being followed
+    const unFollowedUser = await userSchema.findByIdAndUpdate(
+      req.body.unFollowId,
+      { $pull: { followers: req.user._id } },
+      { new: true }
+    );
+
+    if (!unFollowedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update the current user's following list
+    const currentUser = await userSchema.findByIdAndUpdate(
+      req.user._id,
+      { $pull: { following: req.body.unFollowId } },
+      { new: true }
+    ).select('-password');
+
+    res.status(200).json(currentUser);
 })

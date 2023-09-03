@@ -17,7 +17,6 @@ const Profile = () => {
     })
   }, [])
 
-
   return (
     <div className="flex h-screen w-full justify-center pt-[50px]">
       <div className="w-[160vh]">
@@ -32,6 +31,11 @@ const Profile = () => {
               {currentUser?.username}
             </h3>
             <p className="md:mt-[20px] md:text-[20px] text-[12px] text-gray-500">{currentUser?.body}</p>
+            <div className="md:ps-1 md:mt-[20px] mt-5 flex md:gap-4 gap-2">
+        <h4 className="md:text-xl text-[15px] text-center">{myPost?.length} Posts</h4>
+        <h4 className="md:text-xl text-[15px] text-center">{currentUser?.followers.length} Followers</h4>
+        <h4 className="md:text-xl text-[15px] text-center">{currentUser?.following.length} Following</h4>
+        </div>
             </div>
           </div>
         </div>

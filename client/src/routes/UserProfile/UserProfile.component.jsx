@@ -1,7 +1,9 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { UserContext } from "../../context/user.context";
 
 const UserProfile = () => {
+  const {setCurrentUser}=  useContext(UserContext)
     const {userId} = useParams()
     const [userProfile, setUserProfile] = useState(null);
     const [userPosts, setUserPosts] = useState(null);
@@ -18,6 +20,30 @@ const UserProfile = () => {
         })
       }, [])
 
+      const followUser = () => {
+        fetch('http://localhost:5000/api/auth/follow', {
+          method: "put",
+          headers: {
+            'Content-type': "application/json",
+            'Authorization': "Bearer " + localStorage.getItem("token")
+          },
+          body: JSON.stringify({
+            followId:userId
+          })
+        }).then(res => res.json())
+        .then(result => {
+          if(result.error) {
+            return alert(result.error)
+         } else {
+             localStorage.removeItem("user")
+             localStorage.setItem("user", JSON.stringify(result))
+             const updatedUser = JSON.parse(localStorage.getItem("user"));
+             setCurrentUser(updatedUser)
+             window.location.reload()
+         }  })
+      }
+    
+
   return (
     <div className="flex h-screen w-full justify-center pt-[50px]">
     <div className="w-[160vh]">
@@ -32,7 +58,10 @@ const UserProfile = () => {
             <h3 className="md:text-5xl text-2xl text-gray-900 font-medium leading-8 flex items-center">
           {userProfile?.username}
         </h3>
-        <button className="mt-3 py-2 px-5 bg-blue-600 text-white hover:bg-blue-500 transition-all cursor-pointer">Follow</button>
+        {
+          
+        }
+        <button onClick={() => followUser()} className="mt-3 py-2 px-5 bg-blue-600 text-white hover:bg-blue-500 transition-all cursor-pointer">Follow</button>
             </div>
         
         <p className="md:mt-[10px] ps-1 mt-0 md:text-[15px] text-[10px] text-gray-500">Hey there</p>
