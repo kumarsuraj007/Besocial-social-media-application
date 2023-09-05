@@ -10,6 +10,7 @@ import Post from "./routes/Post/Post.component";
 import Edit from "./routes/EditProfile/Edit.component";
 import UserProfile from "./routes/UserProfile/UserProfile.component";
 import './App.css'
+import Chat from "./routes/chat/Chat";
 
 const App = () => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const App = () => {
         <Route path="/createpost" element={<Post />} /> 
         <Route path="/editprofile" element={<Edit />} /> 
         <Route path="/profile/:userId" element={<UserProfile />} /> 
+        <Route path="/chat" element={<Chat />} /> 
       </Route>
     </Routes>
   );
