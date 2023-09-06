@@ -10,6 +10,6 @@ senderId :{
 text :{
     type: String
 }
-},{timestamp: "true"})
+},{timestamps: true})
 
 export default mongoose.model("MESSAGES", messageSchema);

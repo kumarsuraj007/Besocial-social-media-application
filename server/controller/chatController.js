@@ -11,7 +11,7 @@ export const createChat = asyncHandler(async(req, res) => {
 });
 
 export const userChats = asyncHandler(async(req, res) => {
-    const chat = await chatModel.find({
+    const chat = await chatModelSchema.find({
         members: {$in: [req.params.userId]}
     });
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { UserContext } from "../../context/user.context";
+import { MessageSquare } from "lucide-react";
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -97,18 +98,27 @@ const UserProfile = () => {
                 {checkButton ? (
                   <button
                     onClick={() => unFollowUser()}
-                    className="mt-3 py-2 px-5 bg-gray-500 text-white hover:bg-gray-400 transition-all cursor-pointer"
+                    className="mt-3 py-2 px-3 bg-gray-500 text-white hover:bg-gray-400 transition-all cursor-pointer md:px-5 md:py-2"
                   >
                     Unfollow
                   </button>
                 ) : (
                   <button
-                    className="mt-3 py-2 px-5 bg-blue-600 text-white hover:bg-blue-500 transition-all cursor-pointer"
+                    className="mt-3 py-2 px-3 bg-blue-600 text-white hover:bg-blue-500 transition-all cursor-pointer md:px-5 md:py-2"
                     onClick={() => followUser()}
                   >
                     Follow
                   </button>
                 )}
+                {
+                  checkButton ? 
+                  <span className="mt-3 py-2 px-1 cursor-pointer">
+                    <Link to='/chat'>
+                    <MessageSquare />
+                    </Link>
+                  </span>
+                   : null
+                }
               </div>
 
               <p className="md:mt-[10px] ps-1 mt-0 md:text-[15px] text-[10px] text-gray-500">

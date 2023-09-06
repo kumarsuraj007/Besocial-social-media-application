@@ -4,6 +4,6 @@ const chatSchema = mongoose.Schema({
 members :{
     type: Array
 }
-},{timestamp: "true"})
+},{timestamps: true})
 
 export default mongoose.model("CHAT", chatSchema);

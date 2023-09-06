@@ -15,6 +15,7 @@ import Chat from "./routes/chat/Chat";
 const App = () => {
   const navigate = useNavigate();
   const { setCurrentUser } = useContext(UserContext);
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {

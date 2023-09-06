@@ -2,13 +2,8 @@ import asyncHandler from 'express-async-handler'
 import messageModelSchema from '../model/messageModel.js'
 
 export const addMessage = asyncHandler(async(req, res) => {
-    const {chatId, senderId, text} = req.body
-    const result = await messageModelSchema.create({
-        chatId,
-        senderId,
-        text
-    });
-
+    const newMessage = messageModelSchema(req.body)
+    const result = await newMessage.save()
     res.status(200).json(result)
 });
 
