@@ -48,7 +48,7 @@ const Register = () => {
           username,
           email,
           password,
-        }),
+        })
       });
       const response = await fetchData.json();
       if (response.error) {
