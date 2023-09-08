@@ -1,4 +1,5 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
+import {io} from 'socket.io-client'
 import { UserContext } from "../../context/user.context";
 import Message from "../../components/Message/Message";
 import Messenger from "../../components/Messenger/Messenger";
@@ -9,7 +10,34 @@ const Chat = () => {
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [arrivalMessage, setArrivalMessage] = useState(null);
   const userId = currentUser?._id;
+  const scrollRef = useRef()
+  const socket = useRef()
+
+  useEffect(() => {
+    socket.current = io('ws://localhost:8900')
+    socket.current.on("getMessage", data => {
+      setArrivalMessage({
+        sender: data.senderId,
+        text: data.text,
+        createdAt: Date.now()
+      })
+    })
+  }, [])
+
+  useEffect (() => {
+    arrivalMessage &&
+    currentChat?.members.includes (arrivalMessage.sender) &&
+    setMessages ((prev) => [...prev, arrivalMessage]);
+    }, [arrivalMessage, currentChat]);
+
+  useEffect(() => {
+   socket.current.emit("addUser", userId)
+   socket.current.on("getUsers", users => {
+    console.log(users)
+   })
+  }, [currentUser])
 
   useEffect(() => {
     const getConversation = () => {
@@ -41,6 +69,14 @@ const Chat = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const receiverId = currentChat.members.find(member => member !== userId)
+
+    socket.current.emit("sendMessage", {
+      senderId: userId,
+      receiverId,
+      text:newMessage
+    })
+
     fetch("http://localhost:5000/api/messages", {
       method: "post",
       headers: {
@@ -56,8 +92,13 @@ const Chat = () => {
       .then((res) => res.json())
       .then((result) => {
         setMessages([...messages, result]);
-      });
-  };
+        setNewMessage("")
+      })
+  }
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({behavior: "smooth"})
+  }, [messages])
 
   return (
     <div className="flex">
@@ -74,14 +115,17 @@ const Chat = () => {
 
       {currentChat ? (
         <>
-          <div className="flex bg-gray-100 h-screen flex-col w-full">
+          <div className="flex bg-gray-100 flex-col w-full">
             {messages?.map((m) => (
+            <div ref={scrollRef}>
               <Message message={m} own={m?.senderId == userId} key={m._id} />
+              </div>
             ))}
             <div className="flex items-center p-4">
               <input
                 onChange={(e) => setNewMessage(e.target.value)}
                 type="text"
+                value={newMessage}
                 placeholder="Type your message..."
                 className="w-full rounded-lg border border-gray-300 px-4 py-2"
               />

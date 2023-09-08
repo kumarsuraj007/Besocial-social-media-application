@@ -91,7 +91,7 @@ const UserProfile = () => {
               src={userProfile?.photo}
             />
             <div className="flex justify-center flex-col mx-2 ">
-              <div className="flex gap-10">
+              <div className="flex gap-5">
                 <h3 className="md:text-5xl text-2xl text-gray-900 font-medium leading-8 flex items-center">
                   {userProfile?.username}
                 </h3>
@@ -104,7 +104,7 @@ const UserProfile = () => {
                   </button>
                 ) : (
                   <button
-                    className="mt-3 py-2 px-3 bg-blue-600 text-white hover:bg-blue-500 transition-all cursor-pointer md:px-5 md:py-2"
+                    className="mt-3 py-2 px-1 bg-blue-600 text-white hover:bg-blue-500 transition-all cursor-pointer md:px-5 md:py-2"
                     onClick={() => followUser()}
                   >
                     Follow
