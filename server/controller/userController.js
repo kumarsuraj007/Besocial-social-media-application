@@ -116,3 +116,46 @@ export const unFollowUser = asyncHandler(async(req, res) => {
 
     res.status(200).json(currentUser);
 })
+
+//get friends
+// export const getFriends = asyncHandler(async (req, res) => {
+//       const user = await userSchema.findById(req.params.userId);
+//       const friends = await Promise.all(
+//         userSchema.following?.map((friendId) => {
+//           return userSchema.findById(friendId);
+//         })
+//       )
+//       let friendList = [];
+//       friends?.map((friend) => {
+//         const { _id, username, profilePicture } = friend;
+//         friendList.push({ _id, username, profilePicture });
+//       });
+//       res.status(200).json(friendList)
+//   })
+
+export const getFriends = asyncHandler(async (req, res) => {
+  try {
+    const user = await userSchema.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const friends = await Promise.all(
+      (user.following || []).map(async (friendId) => {
+        const friend = await userSchema.findById(friendId);
+        return friend;
+      })
+    );
+
+    const friendList = friends.map((friend) => {
+      const { _id, username, profilePicture } = friend;
+      return { _id, username, profilePicture };
+    });
+
+    res.status(200).json(friendList);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});

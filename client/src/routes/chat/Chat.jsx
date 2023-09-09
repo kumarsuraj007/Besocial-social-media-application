@@ -10,6 +10,7 @@ const Chat = () => {
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const userId = currentUser?._id;
   const scrollRef = useRef()
@@ -35,7 +36,8 @@ const Chat = () => {
   useEffect(() => {
    socket.current.emit("addUser", userId)
    socket.current.on("getUsers", users => {
-    console.log(users)
+    // console.log(users)
+    setOnlineUsers(users)
    })
   }, [currentUser])
 
@@ -43,7 +45,7 @@ const Chat = () => {
     const getConversation = () => {
       fetch(`http://localhost:5000/api/chat/${userId}`, {
         headers: {
-          Authorization: localStorage.getItem("token"),
+        "Authorization": "Bearer " + localStorage.getItem('token')
         },
       })
         .then((res) => res.json())
@@ -81,13 +83,13 @@ const Chat = () => {
       method: "post",
       headers: {
         "Content-type": "application/json",
-        Authorization: localStorage.getItem("token"),
+        "Authorization": "Bearer " + localStorage.getItem('token')
       },
       body: JSON.stringify({
         chatId: currentChat?._id,
         senderId: currentUser?._id,
         text: newMessage,
-      }),
+      })
     })
       .then((res) => res.json())
       .then((result) => {
@@ -103,7 +105,7 @@ const Chat = () => {
   return (
     <div className="flex">
       {chat?.map((c) => (
-        <div key={c._id} onClick={() => setCurrentChat(c)}>
+        <div key={c._id} onClick={() => setCurrentChat(c)} className="">
           <Messenger
             chat={c}
             currentUser={currentUser}

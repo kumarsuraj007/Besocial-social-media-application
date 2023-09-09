@@ -18,9 +18,10 @@ const Messenger = ({currentUser, chat}) => {
   }
   getUser()
  }, [currentUser, chat])
+
   
   return (
-    <div className='h-screen md:w-[60vh] w-[15vh]'>
+    <div className='md:w-[60vh] w-[15vh]'>
     <div className='flex items-center hover:bg-gray-200 transition-all cursor-pointer w-full py-4 px-5'>
     <img src={user?.photo} alt="" className='h-[60px] w-[60px] md:flex hidden rounded-full object-cover' />
     <span className='px-5 text-[18px]'>{user?.username}</span>

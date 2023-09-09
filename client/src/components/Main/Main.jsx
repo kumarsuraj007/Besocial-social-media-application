@@ -115,7 +115,7 @@ const Main = () => {
       {data?.map((item) => {
         return (
           <>
-      <hr className="mb-9" />
+      <hr className="mb-9"/>
           <div key={item._id} className="grid pb-[50px]">
             <div className="flex px-4">
               <img
