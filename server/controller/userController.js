@@ -1,4 +1,6 @@
 import userSchema from '../model/userModel.js'
+import chatSchema from '../model/chatModel.js'
+import messageSchema from '../model/messageModel.js'
 import asyncHandler from 'express-async-handler'
 import Jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
@@ -118,44 +120,128 @@ export const unFollowUser = asyncHandler(async(req, res) => {
 })
 
 //get friends
-// export const getFriends = asyncHandler(async (req, res) => {
-//       const user = await userSchema.findById(req.params.userId);
-//       const friends = await Promise.all(
-//         userSchema.following?.map((friendId) => {
-//           return userSchema.findById(friendId);
-//         })
-//       )
-//       let friendList = [];
-//       friends?.map((friend) => {
-//         const { _id, username, profilePicture } = friend;
-//         friendList.push({ _id, username, profilePicture });
-//       });
-//       res.status(200).json(friendList)
-//   })
-
 export const getFriends = asyncHandler(async (req, res) => {
   try {
     const user = await userSchema.findById(req.params.userId);
-
+    
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+    
+    // Check if user.following is an array before mapping
+    if (!Array.isArray(user.following)) {
+      return res.status(200).json([]); // Return an empty array if following is not an array
+    }
 
     const friends = await Promise.all(
-      (user.following || []).map(async (friendId) => {
+      user.following.map(async (friendId) => {
         const friend = await userSchema.findById(friendId);
-        return friend;
+        if (friend) {
+          return { _id: friend._id, username: friend.username, profilePicture: friend.photo };
+        }
+        return null;
       })
     );
 
-    const friendList = friends.map((friend) => {
-      const { _id, username, profilePicture } = friend;
-      return { _id, username, profilePicture };
-    });
+    // Filter out null values (friends that were not found)
+    const friendList = friends.filter((friend) => friend !== null);
 
     res.status(200).json(friendList);
   } catch (error) {
+    // Handle any errors here
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+// export const getFriends = asyncHandler(async (req, res) => {
+  //     const user = await userSchema.findById(req.params.userId);
+  //     const friends = await Promise.all(
+  //       userSchema.following?.map((friendId) => {
+  //         return userSchema.findById(friendId);
+  //       })
+  //     )
+  //     let friendList = [];
+  //     friends?.map((friend) => {
+  //       const { _id, username, profilePicture } = friend;
+  //       friendList.push({ _id, username, profilePicture });
+  //     });
+  //     res.status(200).json(friendList)
+  // })
+
+// export const getFriends = asyncHandler(async (req, res) => {
+//     const user = await userSchema.findById(req.params.userId);
+
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     const friends = await Promise.all(
+//       (userSchema.following || []).map(async (friendId) => {
+//         const friend = await userSchema.findById(friendId);
+//         return friend;
+//       })
+//     );
+
+//     const friendList = friends.map((friend) => {
+//       const { _id, username, profilePicture } = friend;
+//       return { _id, username, profilePicture };
+//     });
+
+//     res.status(200).json(friendList);
+ 
+// });
+
+
+// get user convo
+export const getUserConvo = asyncHandler(async (req, res) => {
+  try {
+    const conversation = await chatSchema.find({
+    members: { $in: [req.params.userId] },
+    });
+    res.status (200).json (conversation);
+    } catch (err) {
+    res.status (500).json(err);
+    }
+});
+
+// get convo includes two users 
+// export const getAllConvo = asyncHandler(async(req, res) => {
+//   try {
+//     const conversation = await messageSchema.findOne({
+//     members: { $all: [req.params.firstUserId, req.params.secondUserId] },
+//     });
+//     res.status(200).json(conversation)
+//     } catch (err) {
+//     res.status (500).json(err);
+//     }
+// }) 
+
+export const getAllConvo = asyncHandler(async (req, res) => {
+  try {
+    // Debugging: Log the user IDs to ensure they are correct
+    console.log('firstUserId:', req.params.firstUserId);
+    console.log('secondUserId:', req.params.secondUserId);
+
+    // Query MongoDB to find conversations
+    const conversation = await chatSchema.findOne({
+      members: { $all: [req.params.firstUserId, req.params.secondUserId] },
+    });
+
+    // Debugging: Log the result of the query
+    console.log('Conversation:', conversation);
+
+    if (!conversation) {
+      // Conversation not found, handle this case appropriately
+      return res.status(404).json({ message: 'Conversation not found' });
+    }
+
+    // Conversation found, send it in the response
+    res.status(200).json(conversation);
+  } catch (err) {
+    // Handle any errors that occur during the query or processing
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+

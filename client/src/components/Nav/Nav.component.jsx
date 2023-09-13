@@ -32,8 +32,8 @@ const Nav = () => {
   const toggle = () => setIsOpen(!isOpen)
   return (
     <>
-    <nav className='flex w-[200px] justify-end'>
-    <div className='hidden w-full md:flex justify-between '>
+    <nav className='flex justify-end'>
+    <div className='hidden w-full md:flex justify-between gap-5'>
       <NavLinks />
     </div>
     <div>
@@ -42,7 +42,7 @@ const Nav = () => {
     
     </nav>
     {isOpen && (
-      <div className='flex flex-col items-center basis-full'>
+      <div className='flex flex-col items-center basis-full gap-4'>
         <NavLinks />
       </div>
     )}

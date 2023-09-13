@@ -3,6 +3,7 @@ import {io} from 'socket.io-client'
 import { UserContext } from "../../context/user.context";
 import Message from "../../components/Message/Message";
 import Messenger from "../../components/Messenger/Messenger";
+import Friends from "../../components/Friends/friends";
 
 const Chat = () => {
   const { currentUser } = useContext(UserContext);
@@ -35,9 +36,11 @@ const Chat = () => {
 
   useEffect(() => {
    socket.current.emit("addUser", userId)
-   socket.current.on("getUsers", users => {
+   socket.current.on("getUsers", (users) => {
     // console.log(users)
-    setOnlineUsers(users)
+    setOnlineUsers(
+      currentUser?.following?.filter((f) => users.some((u) => u.userId === f))
+      )
    })
   }, [currentUser])
 
@@ -145,6 +148,11 @@ const Chat = () => {
           Open Chat
         </span>
       )}
+      <div>
+      <Friends chat={chat} onlineUsers={onlineUsers} currentUser={currentUser} setCurrentChat={setCurrentChat}
+  />
+      </div>
+       
     </div>
   );
 };
