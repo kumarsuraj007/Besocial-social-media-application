@@ -20,7 +20,7 @@ const Messenger = ({ currentUser, chat }) => {
   }, [currentUser, chat]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex">
       <div className="md:w-[45vh] w-[15vh]">
         <div className="flex items-center hover:bg-gray-200 transition-all cursor-pointer py-4 px-5">
           <img
@@ -30,8 +30,8 @@ const Messenger = ({ currentUser, chat }) => {
           />
           <span className="px-5 text-[18px]">{user?.username}</span>
         </div>
+        <hr />
       </div>
-      <hr />
     </div>
   );
 };

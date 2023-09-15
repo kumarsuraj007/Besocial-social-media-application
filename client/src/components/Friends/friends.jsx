@@ -60,8 +60,8 @@ const Friends = ({ onlineUsers, currentUser, setCurrentChat }) => {
         .then(result => setCurrentChat(result))
       }
 
-      const result = await response.json();
-      setCurrentChat(result);
+      // const result = await response.json();
+      // setCurrentChat(result);
 
       // Handle setting the current chat or any other logic here
     } catch (error) {

@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect, useRef } from "react";
-import {io} from 'socket.io-client'
+import { io } from "socket.io-client";
 import { UserContext } from "../../context/user.context";
 import Message from "../../components/Message/Message";
 import Messenger from "../../components/Messenger/Messenger";
@@ -14,41 +14,41 @@ const Chat = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const userId = currentUser?._id;
-  const scrollRef = useRef()
-  const socket = useRef()
+  const scrollRef = useRef();
+  const socket = useRef();
 
   useEffect(() => {
-    socket.current = io('ws://localhost:8900')
-    socket.current.on("getMessage", data => {
+    socket.current = io("ws://localhost:8900");
+    socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
         text: data.text,
-        createdAt: Date.now()
-      })
-    })
-  }, [])
-
-  useEffect (() => {
-    arrivalMessage &&
-    currentChat?.members.includes (arrivalMessage.sender) &&
-    setMessages ((prev) => [...prev, arrivalMessage]);
-    }, [arrivalMessage, currentChat]);
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
 
   useEffect(() => {
-   socket.current.emit("addUser", userId)
-   socket.current.on("getUsers", (users) => {
-    // console.log(users)
-    setOnlineUsers(
-      currentUser?.following?.filter((f) => users.some((u) => u.userId === f))
-      )
-   })
-  }, [currentUser])
+    arrivalMessage &&
+      currentChat?.members.includes(arrivalMessage.sender) &&
+      setMessages((prev) => [...prev, arrivalMessage]);
+  }, [arrivalMessage, currentChat]);
+
+  useEffect(() => {
+    socket.current.emit("addUser", userId);
+    socket.current.on("getUsers", (users) => {
+      // console.log(users)
+      setOnlineUsers(
+        currentUser?.following?.filter((f) => users.some((u) => u.userId === f))
+      );
+    });
+  }, [currentUser]);
 
   useEffect(() => {
     const getConversation = () => {
       fetch(`http://localhost:5000/api/chat/${userId}`, {
         headers: {
-        "Authorization": "Bearer " + localStorage.getItem('token')
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
       })
         .then((res) => res.json())
@@ -74,39 +74,40 @@ const Chat = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const receiverId = currentChat.members?.find(member => member !== userId)
+    const receiverId = currentChat.members?.find((member) => member !== userId);
 
     socket.current.emit("sendMessage", {
       senderId: userId,
       receiverId,
-      text:newMessage
-    })
+      text: newMessage,
+    });
 
     fetch("http://localhost:5000/api/messages", {
       method: "post",
       headers: {
         "Content-type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem('token')
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
       body: JSON.stringify({
         chatId: currentChat?._id,
         senderId: currentUser?._id,
         text: newMessage,
-      })
+      }),
     })
       .then((res) => res.json())
       .then((result) => {
         setMessages([...messages, result]);
-        setNewMessage("")
-      })
-  }
+        setNewMessage("");
+      });
+  };
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({behavior: "smooth"})
-  }, [messages])
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <div className="flex">
+    <div className="block">
       {chat?.map((c) => (
         <div key={c._id} onClick={() => setCurrentChat(c)} className="">
           <Messenger
@@ -117,13 +118,15 @@ const Chat = () => {
           />
         </div>
       ))}
+    </div>
+
 
       {currentChat ? (
         <>
-          <div className="flex flex-col w-full">
+          <div className="w-full flex-1 overflow-auto">
             {messages?.map((m) => (
-            <div ref={scrollRef}>
-              <Message message={m} own={m?.senderId == userId} key={m._id} />
+              <div ref={scrollRef}>
+                <Message message={m} own={m?.senderId == userId} key={m._id} />
               </div>
             ))}
             <div className="flex items-center p-4">
@@ -149,10 +152,13 @@ const Chat = () => {
         </span>
       )}
       <div>
-      <Friends chat={chat} onlineUsers={onlineUsers} currentUser={currentUser} setCurrentChat={setCurrentChat}
-  />
+        <Friends
+          chat={chat}
+          onlineUsers={onlineUsers}
+          currentUser={currentUser}
+          setCurrentChat={setCurrentChat}
+        />
       </div>
-       
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import { format } from "timeago.js";
 const Message = ({ message, own }) => {
+  
   return (
+    <div class="bg-grey-lighter flex-1 overflow-auto">
     <div className="flex flex-col">
       <div className="flex flex-col p-4">
         <div
@@ -20,6 +22,7 @@ const Message = ({ message, own }) => {
           {format(message?.createdAt)}
         </span>
       </div>
+    </div>
     </div>
   );
 };
