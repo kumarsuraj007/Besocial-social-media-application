@@ -7,7 +7,7 @@ const connectDB = asyncHandler(async (err) => {
     console.log(chalk.yellow(`mongodb connected: ${conn.connection.host}`));
     if (err) {
         console.log(`message: ${err.message}`);
-        process.exit()
+        process.exit(1)
     }
 });
 

@@ -4,6 +4,7 @@ const Friends = ({ onlineUsers, currentUser, setCurrentChat }) => {
   const [friends, setFriends] = useState([]);
   const [onlineFriends, setOnlineFriends] = useState([]);
 
+
   useEffect(() => {
     const getFriends = async () => {
       try {
@@ -32,6 +33,7 @@ const Friends = ({ onlineUsers, currentUser, setCurrentChat }) => {
     setOnlineFriends(friends.filter((f) => onlineUsers?.includes(f._id)));
   }, [friends, onlineUsers]);
 
+
   const handleClick = async (user) => {
     try {
       const response = await fetch(`http://localhost:5000/api/auth/findallconvo/${currentUser?._id}/${user._id}`, {
@@ -42,7 +44,20 @@ const Friends = ({ onlineUsers, currentUser, setCurrentChat }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to find conversation');
+        // throw new Error('Failed to find conversation');
+
+        fetch(`http://localhost:5000/api/chat`, {
+          method: "post",
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token")
+          },
+          body: JSON.stringify({
+            senderId: currentUser?._id,
+            receiverId: onlineFriends[0]._id
+          })    
+        }).then(res => res.json())
+        .then(result => setCurrentChat(result))
       }
 
       const result = await response.json();

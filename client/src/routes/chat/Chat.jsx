@@ -74,7 +74,7 @@ const Chat = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const receiverId = currentChat.members.find(member => member !== userId)
+    const receiverId = currentChat.members?.find(member => member !== userId)
 
     socket.current.emit("sendMessage", {
       senderId: userId,
@@ -120,7 +120,7 @@ const Chat = () => {
 
       {currentChat ? (
         <>
-          <div className="flex bg-gray-100 flex-col w-full">
+          <div className="flex flex-col w-full">
             {messages?.map((m) => (
             <div ref={scrollRef}>
               <Message message={m} own={m?.senderId == userId} key={m._id} />

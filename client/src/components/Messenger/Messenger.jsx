@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 const Messenger = ({ currentUser, chat }) => {
   const [user, setUser] = useState(null);
-  const [friends, setFriends] = useState([]);
 
   useEffect(() => {
     const friendId = chat?.members?.find((m) => m !== currentUser?._id);
@@ -20,16 +19,17 @@ const Messenger = ({ currentUser, chat }) => {
     getUser();
   }, [currentUser, chat]);
 
-
   return (
-    <div className="md:w-[45vh] w-[15vh]">
-      <div className="flex items-center hover:bg-gray-200 transition-all cursor-pointer w-full py-4 px-5">
-        <img
-          src={user?.photo}
-          alt=""
-          className="h-[60px] w-[60px] md:flex hidden rounded-full object-cover"
-        />
-        <span className="px-5 text-[18px]">{user?.username}</span>
+    <div className="flex flex-col">
+      <div className="md:w-[45vh] w-[15vh]">
+        <div className="flex items-center hover:bg-gray-200 transition-all cursor-pointer py-4 px-5">
+          <img
+            src={user?.photo}
+            alt=""
+            className="h-[60px] w-[60px] md:flex hidden rounded-full object-cover"
+          />
+          <span className="px-5 text-[18px]">{user?.username}</span>
+        </div>
       </div>
       <hr />
     </div>

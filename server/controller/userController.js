@@ -1,6 +1,5 @@
 import userSchema from '../model/userModel.js'
 import chatSchema from '../model/chatModel.js'
-import messageSchema from '../model/messageModel.js'
 import asyncHandler from 'express-async-handler'
 import Jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
@@ -48,7 +47,7 @@ export const loginUser = asyncHandler(async(req, res) => {
     const comparePassword = await bcrypt.compare(password, existingUserEmail.password)
     if(comparePassword) {
         const token = await Jwt.sign({
-            _id: existingUserEmail.id
+            _id: existingUserEmail._id
         }, secret_key)
         const {_id, username, photo, followers, following} = existingUserEmail
         res.json({message: 'Successfully Login', token, user:{_id, username, photo, followers, following}})
@@ -154,44 +153,6 @@ export const getFriends = asyncHandler(async (req, res) => {
   }
 });
 
-// export const getFriends = asyncHandler(async (req, res) => {
-  //     const user = await userSchema.findById(req.params.userId);
-  //     const friends = await Promise.all(
-  //       userSchema.following?.map((friendId) => {
-  //         return userSchema.findById(friendId);
-  //       })
-  //     )
-  //     let friendList = [];
-  //     friends?.map((friend) => {
-  //       const { _id, username, profilePicture } = friend;
-  //       friendList.push({ _id, username, profilePicture });
-  //     });
-  //     res.status(200).json(friendList)
-  // })
-
-// export const getFriends = asyncHandler(async (req, res) => {
-//     const user = await userSchema.findById(req.params.userId);
-
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-
-//     const friends = await Promise.all(
-//       (userSchema.following || []).map(async (friendId) => {
-//         const friend = await userSchema.findById(friendId);
-//         return friend;
-//       })
-//     );
-
-//     const friendList = friends.map((friend) => {
-//       const { _id, username, profilePicture } = friend;
-//       return { _id, username, profilePicture };
-//     });
-
-//     res.status(200).json(friendList);
- 
-// });
-
 
 // get user convo
 export const getUserConvo = asyncHandler(async (req, res) => {
@@ -205,23 +166,12 @@ export const getUserConvo = asyncHandler(async (req, res) => {
     }
 });
 
-// get convo includes two users 
-// export const getAllConvo = asyncHandler(async(req, res) => {
-//   try {
-//     const conversation = await messageSchema.findOne({
-//     members: { $all: [req.params.firstUserId, req.params.secondUserId] },
-//     });
-//     res.status(200).json(conversation)
-//     } catch (err) {
-//     res.status (500).json(err);
-//     }
-// }) 
 
 export const getAllConvo = asyncHandler(async (req, res) => {
   try {
     // Debugging: Log the user IDs to ensure they are correct
-    console.log('firstUserId:', req.params.firstUserId);
-    console.log('secondUserId:', req.params.secondUserId);
+    // console.log('firstUserId:', req.params.firstUserId);
+    // console.log('secondUserId:', req.params.secondUserId);
 
     // Query MongoDB to find conversations
     const conversation = await chatSchema.findOne({
