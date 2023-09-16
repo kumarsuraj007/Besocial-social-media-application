@@ -4,6 +4,8 @@ import { UserContext } from "../../context/user.context";
 import Message from "../../components/Message/Message";
 import Messenger from "../../components/Messenger/Messenger";
 import Friends from "../../components/Friends/friends";
+import {CameraIcon} from 'lucide-react'
+import { Link } from "react-router-dom";
 
 const Chat = () => {
   const { currentUser } = useContext(UserContext);
@@ -137,6 +139,7 @@ const Chat = () => {
                 placeholder="Type your message..."
                 className="w-full rounded-lg border border-gray-300 px-4 py-2"
               />
+              
               <button
                 className="ml-2 rounded-lg bg-blue-500 px-4 py-2 text-white"
                 onClick={handleSubmit}

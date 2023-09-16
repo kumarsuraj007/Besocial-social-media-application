@@ -41,10 +41,17 @@ const Profile = () => {
         </div>
         <div className="flex ms-4">
         <div className="mt-[30px] flex py-3  px-9 bg-gray-200 cursor-pointer hover:bg-slate-300 transition-all">
-        <Link to='/createpost'>
-          <p className="mx-1">Create Post</p>
+        <Link to='/uploadimage'>
+          <p className="mx-1">Upload Image</p>
         </Link>
         </div>
+
+        <div className="mt-[30px] flex py-3 ml-2  px-9 bg-gray-200 cursor-pointer hover:bg-slate-300 transition-all">
+        <Link to='/uploadvideo'>
+          <p className="mx-1">Upload Video</p>
+        </Link>
+        </div>
+        
         <div className="mt-[30px] flex py-3 ml-2 px-9 bg-gray-200 cursor-pointer hover:bg-slate-300 transition-all">
         <Link to='/editprofile'>
         <p className="mx-1">

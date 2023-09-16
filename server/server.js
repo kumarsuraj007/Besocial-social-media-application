@@ -13,6 +13,7 @@ import postRoute from './routes/postRoute.js'
 import profileRoute from './routes/profileRoute.js'
 import chatRoute from './routes/chatRoute.js'
 import messageRoute from './routes/messageRoute.js'
+import videoRoute from './routes/videoRoute.js'
 
 // Database connection 
 dotenv.config({path: './config/.env'});
@@ -29,6 +30,8 @@ app.use('/api/post', postRoute)
 app.use('/api/profile', profileRoute)
 app.use('/api/chat', chatRoute)
 app.use('/api/messages', messageRoute)
+app.use('/api/videos', videoRoute)
+
 
 
 
