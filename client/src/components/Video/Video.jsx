@@ -1,28 +1,48 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 function VideoUpload() {
-  const [selectedFile, setSelectedFile] = useState();
-  const [title, setTitle] = useState();
-  const [body, setBody] = useState();
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
 
-  const handleUpload = async () => {
+  const handleUpload = () => {
+    if (!selectedFile) {
+      console.error('Please select a video file.');
+      return;
+    }
+  
     const formData = new FormData();
-    formData.append("video", selectedFile);
-
-   fetch("http://localhost:5000/api/videos/upload", {
-    method:"POST",
-    headers: {
-        'Authorization': "Bearer " + localStorage.getItem("token"),
-    },
-    body:JSON.stringify({
-      title, body, selectedFile
+    formData.append('video', selectedFile);
+    formData.append('title', title);
+    formData.append('body', body);
+  
+    fetch('http://localhost:5000/api/videos/upload', {
+      method: 'POST',
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem('token')
+      },
+      body: formData,
     })
-   }).then(res => res.json())
-   .then(result => console.log(result))
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          console.error('Video upload failed.');
+          throw new Error('Video upload failed.');
+        }
+      })
+      .then((result) => {
+        console.log('Video uploaded successfully:', result);
+        setVideoUrl(result.videoUrl);
+      })
+      .catch((error) => {
+        console.error('An error occurred:', error);
+      });
   };
 
   return (
@@ -32,12 +52,14 @@ function VideoUpload() {
           className="outline-none w-[302px] ps-2"
           type="text"
           placeholder="Title"
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <input
           className="outline-none w-[302px] ps-2"
           type="text"
           placeholder="Body"
+          value={body}
           onChange={(e) => setBody(e.target.value)}
         />
         <label
@@ -52,6 +74,14 @@ function VideoUpload() {
           Upload Video
         </button>
       </div>
+      {videoUrl && (
+        <div className="mt-5">
+          <video controls width="400">
+            <source src={videoUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      )}
     </div>
   );
 }

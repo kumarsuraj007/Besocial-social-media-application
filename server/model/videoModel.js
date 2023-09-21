@@ -1,15 +1,20 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const videoSchema = new mongoose.Schema({
-  title: String,
-  body: String,
-  video: String,
-  postedBy:{
-    type: mongoose.Types.ObjectId,
-    ref: 'USER'
-},
+  title: {
+    type: String,
+    required: true,
+  },
+  body: {
+    type: String,
+    required: true,
+  },
+  videoUrl: {
+    type: String,
+    required: true,
+  },
 });
 
-const Video = mongoose.models.Video || mongoose.model('Video', videoSchema);
+export default mongoose.model('Video', videoSchema);
 
-export default Video;
+// module.exports = Video;
