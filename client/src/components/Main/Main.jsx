@@ -14,9 +14,15 @@ const Main = () => {
       },
     })
       .then((res) => res.json())
-      .then((result) => setData(result))
+      .then((result) => {
+        // Sort the posts by createdAt in descending order (latest first)
+       result?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+        setData(result);
+      })
       .catch((err) => console.log(err));
   }, []);
+  
 
   const likePost = (id) => {
     fetch('http://localhost:5000/api/post/like', {
@@ -29,14 +35,9 @@ const Main = () => {
         postId: id
       })
     }).then(res => res.json()).then(result => {
-      const newData = data.map(item => {
-        if (item._id == result._id) {
-          return result
-        } else {
-          return item
-        }
-      })
-      setData(newData)
+       // Sort the posts by createdAt in descending order (latest first)
+      //  result?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+       setData(result);
     }).catch(err => {
       console.log(err)
     })
@@ -114,7 +115,7 @@ const Main = () => {
     <div className="h-auto py-5 md:w-[80vh] w-[50vh] mx-auto mt-[20px]">
       {data?.map((item) => {
         return (
-          <>
+          <div key={item._id}>
       <hr className="mb-9"/>
           <div key={item._id} className="grid pb-[50px]">
             <div className="flex px-4">
@@ -176,7 +177,7 @@ const Main = () => {
               </form>
             <hr className="mt-4" />
           </div>
-          </>
+          </div>
         );
       })}
     </div>

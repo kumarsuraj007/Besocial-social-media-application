@@ -125,7 +125,7 @@ const Chat = () => {
 
       {currentChat ? (
         <>
-          <div className="w-full flex-1 overflow-auto">
+          <div className="w-full flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full h-screen">
             {messages?.map((m) => (
               <div ref={scrollRef}>
                 <Message message={m} own={m?.senderId == userId} key={m._id} />

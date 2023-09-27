@@ -30,8 +30,6 @@ const postSchema = new mongoose.Schema({
         text: String,
         postedBy:{type: mongoose.Types.ObjectId, ref: 'USER'}
     }]
-},
-{timestamp: "true"}
-)
+},{timestamps: true})
 
 export default mongoose.model("POST", postSchema);

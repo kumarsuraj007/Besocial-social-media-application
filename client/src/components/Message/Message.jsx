@@ -1,28 +1,22 @@
 import { format } from "timeago.js";
+
 const Message = ({ message, own }) => {
-  
   return (
-    <div class="bg-grey-lighter flex-1 overflow-auto">
-    <div className="flex flex-col">
-      <div className="flex flex-col p-4">
+    <div >
+      {message && (
         <div
           className={
             own
-              ? "flex items-center self-end rounded-xl rounded-tr bg-blue-500 py-2 px-3 text-white"
-              : "flex items-center self-start rounded-xl rounded-tl bg-gray-300 py-2 px-3"
+              ? "bg-blue-100 rounded-lg max-w-xs py-2 px-3 my-2 ml-auto text-black"
+              : "bg-gray-100 rounded-lg max-w-xs py-2 px-3 my-2 mr-auto"
           }
         >
-          <p>{message?.text}</p>
+          <p className="text-sm">{message.text}</p>
+          <span className="text-xs text-gray-400 block mt-1">
+            {format(message.createdAt)}
+          </span>
         </div>
-        <span
-          className={
-            own ? "text-[12px] flex self-end" : "text-[12px] flex self-"
-          }
-        >
-          {format(message?.createdAt)}
-        </span>
-      </div>
-    </div>
+      )}
     </div>
   );
 };

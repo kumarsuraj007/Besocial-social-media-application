@@ -10,49 +10,48 @@ const io = new Server(server, {
   },
 });
 
-let users = [];
+const users = new Map(); // Use a Map for faster lookups
 
 const addUser = (userId, socketId) => {
-  // Use some to check if a user with the same userId already exists
-  if (!users.some((user) => user.userId === userId)) {
-    users.push({ userId, socketId });
-  }
+  users.set(userId, socketId);
 };
 
 const removeUser = (socketId) => {
-  users = users.filter((user) => user.socketId !== socketId);
+  for (const [userId, id] of users.entries()) {
+    if (id === socketId) {
+      users.delete(userId);
+      break;
+    }
+  }
 };
 
-const getUser = (userId) => {
-  return users.find((user) => user.userId === userId);
+const getUserSocket = (userId) => {
+  return users.get(userId);
 };
 
 io.on('connection', (socket) => {
   // When a user connects
   console.log('A user connected.');
 
-  // Take userId and socketId from the user
   socket.on('addUser', (userId) => {
     addUser(userId, socket.id);
-    io.emit('getUsers', users);
+    io.emit('getUsers', Array.from(users.keys()));
   });
 
-  // Send and get messages
   socket.on('sendMessage', ({ senderId, receiverId, text }) => {
-    const user = getUser(receiverId);
-    if (user) {
-      io.to(user.socketId).emit('getMessage', {
+    const receiverSocketId = getUserSocket(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit('getMessage', {
         senderId,
         text,
       });
     }
   });
 
-  // When a user disconnects
   socket.on('disconnect', () => {
     console.log('A user disconnected!');
     removeUser(socket.id);
-    io.emit('getUsers', users);
+    io.emit('getUsers', Array.from(users.keys()));
   });
 });
 
