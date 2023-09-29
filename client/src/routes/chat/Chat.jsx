@@ -41,7 +41,7 @@ const Chat = () => {
     socket.current.on("getUsers", (users) => {
       // console.log(users)
       setOnlineUsers(
-        currentUser?.following?.filter((f) => users.some((u) => u.userId === f))
+        currentUser?.following?.filter((f) => users.some((u) => u?.userId === f))
       );
     });
   }, [currentUser]);

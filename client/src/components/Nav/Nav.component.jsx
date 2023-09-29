@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import {Link} from 'react-router-dom'
-import {Menu, X, MessageSquare} from 'lucide-react'
+import {Menu, X, MessageSquare, SearchIcon} from 'lucide-react'
 import { UserContext } from '../../context/user.context'
 
 const NavLinks = () => {
@@ -21,6 +21,10 @@ const NavLinks = () => {
     }  
      {
       localStorage.getItem('token') !== null ? (<Link to='/chat'>< MessageSquare/></Link>)
+      : (null)
+    }  
+    {
+      localStorage.getItem('token') !== null ? (<Link to='/search'>< SearchIcon/></Link>)
       : (null)
     }  
     </>

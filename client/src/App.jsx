@@ -10,8 +10,8 @@ import Post from "./routes/Post/Post.component";
 import Edit from "./routes/EditProfile/Edit.component";
 import UserProfile from "./routes/UserProfile/UserProfile.component";
 import Chat from "./routes/chat/Chat";
-import CameraComponent from "./components/Camera/Camera";
-import VideoUpload from "./components/Video/Video";
+import MainSearch from "./components/SearchUser/MainSearch/MainSearch";
+
 
 const App = () => {
   const navigate = useNavigate();
@@ -39,11 +39,12 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/uploadimage" element={<Post />} />
-        <Route path="/uploadvideo" element={<VideoUpload />} />
         <Route path="/editprofile" element={<Edit />} />
         <Route path="/profile/:userId" element={<UserProfile />} />
         <Route path="/chat" element={<Chat />} />
-        <Route path="/camera" element={<CameraComponent />} />
+        <Route path="/search" element={<MainSearch />} />
+
+        {/* <Route path="/camera" element={<CameraComponent />} /> */}
       </Route>
     </Routes>
   );

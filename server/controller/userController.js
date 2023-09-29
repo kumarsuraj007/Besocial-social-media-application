@@ -195,3 +195,14 @@ export const getAllConvo = asyncHandler(async (req, res) => {
   }
 });
 
+export const searchUsers = asyncHandler(async(req, res) => {
+    let userPattern = new RegExp("^"+req.body.query)
+    userSchema.find({email: {$regex:userPattern}})
+    .select("_id email username")
+    .then(user=>{
+    res.json({user})
+    }).catch(err=>{
+    console.log(err)
+    })
+})
+
