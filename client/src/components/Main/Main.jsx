@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Main = () => {
   const {currentUser} = useContext(UserContext)
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:5000/api/post/allpost", {
@@ -35,9 +35,14 @@ const Main = () => {
         postId: id
       })
     }).then(res => res.json()).then(result => {
-       // Sort the posts by createdAt in descending order (latest first)
-      //  result?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-       setData(result);
+      const newData = data.map(item => {
+        if (item._id == result._id) {
+          return result
+        } else {
+          return item
+        }
+      })
+       setData(newData);
     }).catch(err => {
       console.log(err)
     })
